@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Create .env.dev
+        run: |
+          echo "FLASK_APP=project/__init__.py" >> .env.dev
+          echo "FLASK_DEBUG=1" >> .env.dev
+          echo "DATABASE_URL=postgresql://hello_flask:hello_flask@db:5432/hello_flask_dev" >> .env.dev
+          echo "SQL_HOST=db" >> .env.dev
+          echo "SQL_PORT=5432" >> .env.dev
+          echo "DATABASE=postgres" >> .env.dev
+          echo "APP_FOLDER=/usr/src/app" >> .env.dev
+
+      - name: Create .env.dev.db
+        run: |
+          echo "POSTGRES_USER=hello_flask" >> .env.dev.db
+          echo "POSTGRES_PASSWORD=hello_flask" >> .env.dev.db
+          echo "POSTGRES_DB=hello_flask_dev" >> .env.dev.db
+
+      - name: Build and start containers
+        run: docker compose up -d --build
+
+      - name: Wait for services to be ready
+        run: sleep 10
+
+      - name: Initialize database
+        run: docker compose exec -T web python manage.py create_db
+
+      - name: Test hello world endpoint
+        run: |
+          response=$(curl -s http://localhost:5001/)
+          echo "$response"
+          echo "$response" | grep -q "world"
+
+      - name: Tear down
+        run: docker compose down -v
