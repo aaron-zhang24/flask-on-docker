@@ -40,7 +40,7 @@ jobs:
 
       - name: Test hello world endpoint
         run: |
-          response=$(curl -s http://localhost:5001/)
+          response=$(curl -s http://localhost:30000/)
           echo "$response"
           echo "$response" | grep -q "world"
 
