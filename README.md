@@ -1,11 +1,11 @@
-![CI]((https://github.com/aaron-zhang24/flask-on-docker/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/aaron-zhang24/flask-on-docker/actions/workflows/ci.yml/badge.svg)
 
 ## Overview
 
 This repository is a containerized Flask web application with PostgreSQL, Gunicorn, and Nginx using Docker. The app supports static files and image uploads hosted on production with Gunicorn and Nginx. The repository contains the yml files for both production and development configurations.
 
 ## Demo 
-![Demo](demo.gif) 
+![Demo](media/demo.gif) 
 
 ## Build Instructions
 
